@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>Sign in &laquo; Admin</title>
+  <link rel="stylesheet" href="../assets/vendors/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+  <div class="login">
+    <div class="login-wrap">
+      <img class="avatar" src="../assets/img/default.png">
+      <!-- 有错误信息时展示 -->
+      <div class="alert alert-danger" style="display:none;">
+        <strong>错误！</strong> <span id="msg">用户名或密码错误！</span>
+      </div>
+      <div class="form-group">
+        <label for="email" class="sr-only">邮箱</label>
+        <input id="email" type="email" class="form-control" placeholder="邮箱" autofocus>
+      </div>
+      <div class="form-group">
+        <label for="password" class="sr-only">密码</label>
+        <input id="password" type="password" class="form-control" placeholder="密码">
+      </div>
+      <button class="btn btn-primary btn-block" id="loginBtn">登 录</button>
+    </div>
+  </div>
+  <script src="../assets/vendors/jquery/jquery.min.js"></script>
+  <script type="text/javascript">
+  // 选择登录按钮并为其添加点击事件
+  $('#loginBtn').on('click',function(){
+      var email = $('#email').val();
+      var password = $('#password').val();
+      var emailReg = /\w+[@]\w+[.]\w+/;
+      var pwdReg = /\w{4,18}/;
+      // alert(email,password);//事件注册成功内容已获取到;
+      if(email.trim().length==0 || !emailReg.test(email) ){
+        // alert('请输入邮箱')
+       
+        $('.alert').fadeIn(1000).delay(1000).fadeOut(1000).children('#msg').html('邮箱不合法');
+        return;
+      }
+      if(password.trim().length==0 || !pwdReg.test(password)){
+        $('.alert').fadeIn(1000).delay(1000).fadeOut(1000).children('#msg').html('请输入密码')
+        
+        return;
+      }
+      $.ajax({
+        type:'post',
+        url:'/login',
+        data:{
+          email:email,
+          password:password
+        },
+        success:function(res){
+          console.log(res);
+          location.href = 'index.html';
+        },
+        error:function(){
+          $('#msg').text('邮箱地址或者密码输入错误');
+
+        }
+      })
+  });
+
+  </script>
+</body>
+</html>
