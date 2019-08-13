@@ -184,7 +184,6 @@
 
   <script src="../assets/vendors/jquery/jquery.js"></script>
   <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
-  <script>NProgress.done()</script>
   <script src="../assets/js/common.js"></script>
   <script src="../assets/vendors/art-template/template-web.js"></script>
   <script type="text/html" id='userTpl'>
@@ -195,14 +194,16 @@
         <td>{{$value.email}}</td>
         <td>{{$value.nickName}}</td>
         <td>{{$value.status==1?'激活':'未激活'}}</td>
-        <td>{{$value.role=="admin"?'超级管理员':'普通用户'}}</td>
+        <td>{{$value.role=="admin"?'超级管理员':'普通用户'}} </td>
         <td class="text-center" data-id="{{@$value._id}}">
           <a href="javascript:;" class="btn btn-default btn-xs" id="edit">编辑</a>
-          <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+          <a href="javascript:;" class="btn btn-danger btn-xs del">删除</a>
         </td>
       </tr> 
   {{/each}}
   </script>
   <script src="../assets/js/user.js"></script>
+  <script>NProgress.done()</script>
+
 </body>
 </html>

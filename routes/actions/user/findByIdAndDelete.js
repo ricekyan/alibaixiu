@@ -36,11 +36,11 @@ module.exports = async (req, res) => {
 			let user = await User.findByIdAndDelete(item);
 			// 将删除的用户存储在数组中
 			result.push(user);
-			// 如果缩略图存在
-			if (user.avatar) {
-				// 删除缩略图
-				await unlink(path.join(__dirname, '../', '../', 'public', 'uploads', user.avatar));
-			}
+			// // 如果缩略图存在
+			// if (user.avatar) {
+			// 	// 删除缩略图
+			// 	await unlink(path.join(__dirname, '../', '../', 'public', 'uploads', user.avatar));
+			// }
 		}
 		// 响应
 		res.send(result);

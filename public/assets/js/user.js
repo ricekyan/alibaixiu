@@ -20,7 +20,7 @@ function render(arr){
 
 // 添加用户功能 //button按钮实现添加功能
 $('button').on('click',function(){
-	alert('上传');
+	// alert('上传');
     // console.log($('#userForm').serialize());
     $.ajax({
         url:'/users',
@@ -108,6 +108,95 @@ $('#userEdit').on('click',function(){
 			var index = userArr.findIndex(item =>item._id==userId);
 			userArr[index]=res;
 			render(userArr);
+			//修改用户之后将表单数据还原
+			$('#userForm > h2').text('添加新用户');
+			$('#hiddenAvatar').val('');
+			$('#preview').attr('src','../assets/img/default.png');
+			$('#userAdd').show();
+			$('#userEdit').hide();
+			$('#email').val('');
+			$('#nickName').val('');
+			$('#admin').prop('checked',false);
+			$('#normal').prop('checked',false);
+			$('#jh').prop('checked',false);
+			$('#wjh').prop('checked',false);
+
+
+
 		}
 	})
+});
+//完成单个删除功能;
+$('tbody').on('click','.del',function(){
+	if(window.confirm('您确定要删除吗?')){
+		var id = $(this).parent().attr('data-id');
+		$.ajax({
+			type:'delete',
+			url:'/users/'+id,
+			success:function(res){
+				var index = userArr.findIndex(item=>item._id==res._id);
+				userArr.splice(index,1);
+				render((userArr));
+			}
+		})
+	}
+});
+//实现全选功能 
+$('thead input').on('click',function(){
+	//选中的框
+	// alert('checked........')
+	let flag = $(this).prop('checked');
+	$('tbody input').prop('checked',flag);
+	console.log(flag);
+	
+	if(flag){
+		$('.btn-sm').show();
+
+	}else{
+		$('.btn-sm').hide();
+
+	}
+});
+$('tbody').on('click','input',function(){
+	// alert('单选/....');
+	if($('tbody input').length==$('tbody input:checked').length){
+		$('thead input').prop('checked',true);
+		$('.btn-sm').show();
+	}else{
+		$('thead input').prop('checked',false);
+		$('.btn-sm').hide();
+	}
+	if($('tbody input:checked').length>=2){
+		$('.btn-sm').show();
+	}else{
+		$('.btn-sm').hide();
+	}
+});
+//批量删除按钮
+$('.btn-sm').on('click',function(){
+	if(window.confirm('您确定要删除吗?')){
+	var ids = [];
+	var checkUser = $('tbody input:checked');
+	//循环数组获得当前的值对应的data-id
+	checkUser.each(function(k,v){
+		var id = v.parentNode.parentNode.children[6].getAttribute('data-id');
+		console.log(id);
+		//将id push
+		ids.push(id);
+
+	});
+	//发送删除请求
+	$.ajax({
+		type:'delete',
+		url:'/users/'+ids.join('-'),
+		success:function(res){
+			res.forEach(e =>{
+				var index =userArr.findIndex(item =>item._id==e._id);
+				userArr.splice(index,1);
+				console.log(userArr);
+				render(userArr);
+			})
+		}
+	})
+}
 })
